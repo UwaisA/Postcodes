@@ -16,13 +16,13 @@ class PostcodeUtil(val locale: Locale) {
      * @return True if and only if the postcode passes validation for the given country
      */
     fun isValidPostcode(postcode: String): Boolean {
-        throw NotImplementedError()
+        return validate(locale.country, postcode)
     }
 
     /**
      * @return True if and only if the postcode could have characters added to make it a valid postcode
      */
     fun isValidPartialPostcode(postcode: String): Boolean {
-        throw NotImplementedError()
+        return partialValidate(locale.country, postcode)
     }
 }
