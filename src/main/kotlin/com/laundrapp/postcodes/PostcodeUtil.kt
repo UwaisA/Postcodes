@@ -2,7 +2,7 @@ package com.laundrapp.postcodes
 
 import java.util.*
 
-class PostcodeUtil(val locale: Locale) {
+class PostcodeUtil(private val locale: Locale) {
     constructor(): this(Locale.getDefault())
 
     /**
@@ -16,13 +16,13 @@ class PostcodeUtil(val locale: Locale) {
      * @return True if and only if the postcode passes validation for the given country
      */
     fun isValidPostcode(postcode: String): Boolean {
-        return validate(locale.country, postcode)
+        return Validator(locale).validate(postcode)
     }
 
     /**
      * @return True if and only if the postcode could have characters added to make it a valid postcode
      */
     fun isValidPartialPostcode(postcode: String): Boolean {
-        return partialValidate(locale.country, postcode)
+        return Validator(locale).partialValidate(postcode)
     }
 }
