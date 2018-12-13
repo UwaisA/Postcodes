@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
 
     val gson = GsonBuilder().setPrettyPrinting().create()
 
-    File(regexesFileLocation).writeText(gson.toJson(postcodeJsonObject))
+    File(RegexRetriever.regexesFileLocation).writeText(gson.toJson(postcodeJsonObject))
 }
 
 private fun getPostcodeRegex(it: String): String? {

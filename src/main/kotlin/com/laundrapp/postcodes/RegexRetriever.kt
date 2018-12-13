@@ -7,7 +7,7 @@ import java.util.*
 
 
 object RegexRetriever {
-    private const val regexesFileLocation = "postcode-regexes.json"
+    internal const val regexesFileLocation = "postcode-regexes.json"
     private val typeToken = object: TypeToken<Map<String, String>>(){}.type;
 
     val regexMap: Map<String, String> = Gson().fromJson(File(regexesFileLocation).readText(), typeToken)
