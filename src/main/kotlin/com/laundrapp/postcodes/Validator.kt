@@ -1,27 +1,29 @@
 package com.laundrapp.postcodes
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.File
+import com.laundrapp.postcodes.RegexRetriever.getLocaleRegex
+import java.util.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-const val regexesFileLocation = "postcode-regexes.json"
-private val typeToken = object: TypeToken<Map<String, String>>(){}.type;
-val regexes: Map<String, String> = Gson().fromJson(File(regexesFileLocation).readText(), typeToken)
+class Validator(locale: Locale) {
+    private val localisedPattern = Pattern.compile(getLocaleRegex(locale))
+    private val partialValidateMemo = ConcurrentHashMap<String, Boolean>()
+    private val validateMemo = ConcurrentHashMap<String, Boolean>()
 
-fun validate(countryCode: String, postcode: String): Boolean {
-    checkCountryCodeValidity(countryCode)
-    return regexes.getValue(countryCode).toRegex().matches(postcode)
-}
-
-fun partialValidate(countryCode: String, postcode: String): Boolean {
-    checkCountryCodeValidity(countryCode)
-    val matcher = Pattern.compile(regexes[countryCode]).matcher(postcode)
-    return matcher.matches() || matcher.hitEnd()
-}
-
-private fun checkCountryCodeValidity(countryCode: String) {
-    if (!regexes.containsKey(countryCode)) {
-        throw IllegalStateException("No postcode rules found for country code: $countryCode")
+    fun validate(postcode: String): Boolean {
+        return validateMemo[postcode] ?: localisedPattern.matcher(postcode).matches().also {
+            validateMemo[postcode] = it
+        }
     }
+
+    fun partialValidate(postcode: String): Boolean {
+        return partialValidateMemo[postcode] ?: localisedPattern.matcher(postcode).partiallyMatches().also {
+            partialValidateMemo[postcode] = it
+        }
+    }
+}
+
+private fun Matcher.partiallyMatches(): Boolean {
+    return this.matches() || this.hitEnd()
 }

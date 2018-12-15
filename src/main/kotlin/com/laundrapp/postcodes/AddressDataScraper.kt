@@ -1,10 +1,10 @@
 package com.laundrapp.postcodes
 
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import java.io.File
+import java.io.FileOutputStream
 import java.net.URL
+import java.util.*
 
 private const val baseURL = "http://i18napis.appspot.com/address"
 
@@ -13,21 +13,18 @@ fun main(args: Array<String>) {
     val jsonString = URL("$baseURL/data").readText()
     val countries = jsonString.getAtJsonPath("countries")?.split('~')
 
-    val postcodeJsonObject = countries!!.map {
+    val postcodeProperties = countries?.map {
         it to getPostcodeRegex(it)
-    }.toMap().filterValues {
+    }?.toMap()?.filterValues {
         it != null
-    }.toJsonObject()
+    }?.toProperties(".regexp")
 
-    val gson = GsonBuilder().setPrettyPrinting().create()
-
-    File(regexesFileLocation).writeText(gson.toJson(postcodeJsonObject))
+    postcodeProperties?.storeOrdered(File(RegexRetriever.regexesFileLocation).outputStream(), "")
 }
 
-private fun getPostcodeRegex(it: String): String? {
-    val countryJsonString = URL("$baseURL/data/$it").readText()
-    return countryJsonString
-            .getAtJsonPath("zip")
+private fun getPostcodeRegex(countryCode: String): String? {
+    println("Getting for $countryCode")
+    return URL("$baseURL/data/$countryCode").readText().getAtJsonPath("zip")
 }
 
 private fun String.getAtJsonPath (vararg path: String): String? {
@@ -40,10 +37,21 @@ private fun String.getAtJsonPath (vararg path: String): String? {
     return jsonObject.getAsJsonPrimitive(path.last())?.asString
 }
 
-private fun Map<*, *>.toJsonObject(): JsonObject {
-    val jsonObject = JsonObject()
-    forEach {
-        (key, value) -> jsonObject.addProperty(key.toString(), value.toString())
+private fun Properties.storeOrdered(outputStream: FileOutputStream, comments: String) {
+    val tmp = object : Properties() {
+        @Synchronized
+        override fun keys(): Enumeration<Any> {
+            return Collections.enumeration(TreeSet<Any>(super.keys))
+        }
     }
-    return jsonObject
+    tmp.putAll(this)
+    tmp.store(outputStream, comments)
+}
+
+private fun Map<*, *>.toProperties(appendToKey: String): Properties {
+    val properties = Properties()
+    forEach {
+        (key, value) -> properties[key.toString() + appendToKey] = value.toString()
+    }
+    return properties
 }
