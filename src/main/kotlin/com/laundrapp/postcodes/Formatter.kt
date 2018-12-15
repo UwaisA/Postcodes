@@ -5,10 +5,13 @@ import java.util.*
 class Formatter(locale: Locale) {
 
     private val nonAlphanumeric = "[^a-zA-Z0-9]".toRegex()
+    private val leadingTrailingNonAlphanumeric = "(^[^a-zA-Z0-9]+)|([^a-zA-Z0-9]+$)".toRegex()
     private val validator = Validator(locale)
     private val separator = "-"
 
     fun format(postcode: String): String {
+        val postcodeTrimmed = postcode.replace(leadingTrailingNonAlphanumeric, "")
+        if (validator.partialValidate(postcodeTrimmed)) return postcodeTrimmed
         val postcodeStripped = postcode.replace(nonAlphanumeric, "")
         if (validator.partialValidate(postcodeStripped)) return postcodeStripped
 
