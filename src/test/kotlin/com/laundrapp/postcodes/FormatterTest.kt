@@ -5,8 +5,7 @@ import org.junit.Test
 import java.util.*
 
 class FormatterTest {
-    private val formatterLV: Formatter = Formatter(Locale.forLanguageTag("en-LV"))
-    private val formatterUS: Formatter = Formatter(Locale.US)
+    private val formatterLV = Formatter(Locale.forLanguageTag("en-LV"))
 
     @Test
     fun `'-' added to postcode where needed`() {
@@ -20,30 +19,4 @@ class FormatterTest {
         assertEquals("LV", formatterLV.format("LV-"))
     }
 
-    @Test
-    fun `Leading separators removed from correctly formatted postcode`() {
-        assertEquals("12345 1234", formatterUS.format("12345 1234"))
-        assertEquals("12345 1234", formatterUS.format("-12345 1234"))
-        assertEquals("12345 1234", formatterUS.format("+12345 1234"))
-        assertEquals("12345 1234", formatterUS.format("..12345 1234"))
-        assertEquals("12345-1234", formatterUS.format(".#.12345-1234"))
-    }
-
-    @Test
-    fun `Trailing separators removed from correctly formatted postcode`() {
-        assertEquals("12345 1234", formatterUS.format("12345 1234$"))
-        assertEquals("12345 1234", formatterUS.format("12345 1234$%"))
-        assertEquals("12345 1234", formatterUS.format("12345 1234]["))
-        assertEquals("12345 1234", formatterUS.format("12345 1234;."))
-        assertEquals("12345-1234", formatterUS.format("12345-1234.;."))
-    }
-
-    @Test
-    fun `Trailing + leading separators removed from correctly formatted postcode`() {
-        assertEquals("12345 1234", formatterUS.format("^12345 1234$"))
-        assertEquals("12345 1234", formatterUS.format("&12345 1234$%"))
-        assertEquals("12345 1234", formatterUS.format("((12345 1234]["))
-        assertEquals("12345 1234", formatterUS.format(":>12345 1234;."))
-        assertEquals("12345-1234", formatterUS.format(",<,12345-1234.;."))
-    }
 }
