@@ -3,14 +3,13 @@ package com.laundrapp.postcodes
 import com.laundrapp.postcodes.RegexRetriever.getLocaleRegex
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class Validator(locale: Locale) {
     private val localisedPattern = Pattern.compile(getLocaleRegex(locale))
-    private val partialValidateMemo: ConcurrentMap<String, Boolean> = ConcurrentHashMap()
-    private val validateMemo: ConcurrentMap<String, Boolean> = ConcurrentHashMap()
+    private val partialValidateMemo = ConcurrentHashMap<String, Boolean>()
+    private val validateMemo = ConcurrentHashMap<String, Boolean>()
 
     fun validate(postcode: String): Boolean {
         return validateMemo[postcode] ?: localisedPattern.matcher(postcode).matches().also {
