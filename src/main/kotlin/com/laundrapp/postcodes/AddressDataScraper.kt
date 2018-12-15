@@ -2,6 +2,7 @@ package com.laundrapp.postcodes
 
 import com.google.gson.JsonParser
 import java.io.File
+import java.io.FileOutputStream
 import java.net.URL
 import java.util.*
 
@@ -16,15 +17,14 @@ fun main(args: Array<String>) {
         it to getPostcodeRegex(it)
     }?.toMap()?.filterValues {
         it != null
-    }?.toProperties()
+    }?.toProperties(".regexp")
 
-    postcodeProperties?.store(File(RegexRetriever.regexesFileLocation).outputStream(), "")
+    postcodeProperties?.storeOrdered(File(RegexRetriever.regexesFileLocation).outputStream(), "")
 }
 
 private fun getPostcodeRegex(countryCode: String): String? {
     println("Getting for $countryCode")
-    val countryJsonString = URL("$baseURL/data/$countryCode").readText()
-    return countryJsonString.getAtJsonPath("zip")
+    return URL("$baseURL/data/$countryCode").readText().getAtJsonPath("zip")
 }
 
 private fun String.getAtJsonPath (vararg path: String): String? {
@@ -37,10 +37,21 @@ private fun String.getAtJsonPath (vararg path: String): String? {
     return jsonObject.getAsJsonPrimitive(path.last())?.asString
 }
 
-private fun Map<*, *>.toProperties(): Properties {
+private fun Properties.storeOrdered(outputStream: FileOutputStream, comments: String) {
+    val tmp = object : Properties() {
+        @Synchronized
+        override fun keys(): Enumeration<Any> {
+            return Collections.enumeration(TreeSet<Any>(super.keys))
+        }
+    }
+    tmp.putAll(this)
+    tmp.store(outputStream, comments)
+}
+
+private fun Map<*, *>.toProperties(appendToKey: String): Properties {
     val properties = Properties()
     forEach {
-        (key, value) -> properties["$key.regexp"] = value.toString()
+        (key, value) -> properties[key.toString() + appendToKey] = value.toString()
     }
     return properties
 }
