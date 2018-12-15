@@ -15,14 +15,11 @@ class Formatter(locale: Locale) {
         val postcodeStripped = postcode.replace(nonAlphanumeric, "")
         if (validator.partialValidate(postcodeStripped)) return postcodeStripped
 
-        var postcodeOutput = postcodeStripped
-        var newSeparatorLoc = findSeparatorLocation(postcodeOutput)
-        while (newSeparatorLoc != -1) {
-            postcodeOutput = postcodeOutput.substring(0, newSeparatorLoc) + separator + postcodeOutput.substring(newSeparatorLoc)
-            if (validator.partialValidate(postcodeOutput)) {
-                return postcodeOutput
-            } else {
-                newSeparatorLoc = findSeparatorLocation(postcodeOutput)
+        val newSeparatorLoc = findSeparatorLocation(postcodeStripped)
+        if (newSeparatorLoc != -1) {
+            val postcodeSeparated = postcodeStripped.substring(0, newSeparatorLoc) + separator + postcodeStripped.substring(newSeparatorLoc)
+            if (validator.partialValidate(postcodeSeparated)) {
+                return postcodeSeparated
             }
         }
 
