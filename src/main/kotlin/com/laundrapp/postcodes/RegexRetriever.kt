@@ -20,7 +20,7 @@ object RegexRetriever {
 
     private fun checkCountryCodeValidity(countryKey: String) {
         if (!regexMap.containsKey(countryKey)) {
-            throw IllegalStateException("No postcode rules found for country code: $countryKey")
+            throw IllegalArgumentException("No postcode rules found for country code: $countryKey")
         }
     }
 }
