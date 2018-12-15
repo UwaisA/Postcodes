@@ -2,8 +2,7 @@ package com.laundrapp.postcodes
 
 import java.util.*
 
-class PostcodeUtil(private val locale: Locale) {
-    constructor(): this(Locale.getDefault())
+class PostcodeUtil(private val locale: Locale = Locale.getDefault()) {
 
     /**
      * @return A formatted representation of the input postcode
