@@ -1,10 +1,9 @@
 package com.laundrapp.postcodes
 
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import java.io.File
 import java.net.URL
+import java.util.*
 
 private const val baseURL = "http://i18napis.appspot.com/address"
 
@@ -13,19 +12,18 @@ fun main(args: Array<String>) {
     val jsonString = URL("$baseURL/data").readText()
     val countries = jsonString.getAtJsonPath("countries")?.split('~')
 
-    val postcodeJsonObject = countries!!.map {
+    val postcodeProperties = countries?.map {
         it to getPostcodeRegex(it)
-    }.toMap().filterValues {
+    }?.toMap()?.filterValues {
         it != null
-    }.toJsonObject()
+    }?.toProperties()
 
-    val gson = GsonBuilder().setPrettyPrinting().create()
-
-    File(RegexRetriever.regexesFileLocation).writeText(gson.toJson(postcodeJsonObject))
+    postcodeProperties?.store(File(RegexRetriever.regexesFileLocation).outputStream(), "")
 }
 
-private fun getPostcodeRegex(it: String): String? {
-    val countryJsonString = URL("$baseURL/data/$it").readText()
+private fun getPostcodeRegex(countryCode: String): String? {
+    println("Getting for $countryCode")
+    val countryJsonString = URL("$baseURL/data/$countryCode").readText()
     return countryJsonString
             .getAtJsonPath("zip")
 }
@@ -40,10 +38,10 @@ private fun String.getAtJsonPath (vararg path: String): String? {
     return jsonObject.getAsJsonPrimitive(path.last())?.asString
 }
 
-private fun Map<*, *>.toJsonObject(): JsonObject {
-    val jsonObject = JsonObject()
+private fun Map<*, *>.toProperties(): Properties {
+    val properties = Properties()
     forEach {
-        (key, value) -> jsonObject.addProperty(key.toString(), value.toString())
+        (key, value) -> properties["$key.regexp"] = value.toString()
     }
-    return jsonObject
+    return properties
 }
