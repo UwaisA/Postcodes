@@ -15,7 +15,7 @@ class Formatter(locale: Locale) {
         var postcodeOutput = postcodeStripped
         var newSeparatorLoc = findSeparatorLocation(postcodeOutput)
         while (newSeparatorLoc != -1) {
-            postcodeOutput = postcodeOutput.take(newSeparatorLoc) + separator + postcodeOutput.drop(newSeparatorLoc)
+            postcodeOutput = postcodeOutput.substring(0, newSeparatorLoc) + separator + postcodeOutput.substring(newSeparatorLoc)
             if (validator.partialValidate(postcodeOutput)) {
                 return postcodeOutput
             } else {
@@ -38,12 +38,12 @@ class Formatter(locale: Locale) {
         while (start <= end) {
             val middle = (start + end) / 2
 
-            val partialValidateMiddle = validator.partialValidate(postcode.take(middle))
+            val partialValidateMiddle = validator.partialValidate(postcode.substring(0, middle))
             if (!partialValidateMiddle) {
                 end = middle - 1
                 continue
             }
-            val partialValidateMiddlePlusOne = validator.partialValidate(postcode.take(middle + 1))
+            val partialValidateMiddlePlusOne = validator.partialValidate(postcode.substring(0, middle + 1))
 
             if (partialValidateMiddlePlusOne) {
                 start = middle + 1
