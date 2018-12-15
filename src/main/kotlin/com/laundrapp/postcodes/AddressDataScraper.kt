@@ -24,8 +24,7 @@ fun main(args: Array<String>) {
 private fun getPostcodeRegex(countryCode: String): String? {
     println("Getting for $countryCode")
     val countryJsonString = URL("$baseURL/data/$countryCode").readText()
-    return countryJsonString
-            .getAtJsonPath("zip")
+    return countryJsonString.getAtJsonPath("zip")
 }
 
 private fun String.getAtJsonPath (vararg path: String): String? {
