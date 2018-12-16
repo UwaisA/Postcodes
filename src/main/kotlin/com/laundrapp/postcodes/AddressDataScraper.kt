@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
         it != null
     }?.toProperties(".regexp")
 
-    postcodeProperties?.storeOrdered(File(RegexRetriever.regexesFileLocation).outputStream(), "")
+    postcodeProperties?.storeOrdered(File(RegexRetriever.regexesFileLocation).outputStream(), null)
 }
 
 private fun getPostcodeRegex(countryCode: String): String? {
@@ -37,7 +37,7 @@ private fun String.getAtJsonPath (vararg path: String): String? {
     return jsonObject.getAsJsonPrimitive(path.last())?.asString
 }
 
-private fun Properties.storeOrdered(outputStream: FileOutputStream, comments: String) {
+private fun Properties.storeOrdered(outputStream: FileOutputStream, comments: String?) {
     val tmp = object : Properties() {
         @Synchronized
         override fun keys(): Enumeration<Any> {
