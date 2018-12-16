@@ -7,6 +7,7 @@ import java.util.*
 class FormatterTest {
     private val formatterLV = Formatter(Locale.forLanguageTag("en-LV"))
     private val formatterUS = Formatter(Locale.US)
+    private val formatterSV = Formatter(Locale.forLanguageTag("en-SV"))
 
     @Test
     fun `'-' added to postcode where needed`() {
@@ -22,6 +23,18 @@ class FormatterTest {
         assertEquals("LV", formatterLV.format("LV-"))
         assertEquals("12345", formatterUS.format("12345"))
         assertEquals("12345", formatterUS.format("12345-"))
+    }
+
+    @Test
+    fun `' ' added to postcode where needed`() {
+        assertEquals("CP 1115", formatterSV.format("CP1115"))
+        assertEquals("CP 111", formatterSV.format("CP111"))
+    }
+
+    @Test
+    fun `' ' not inserted when it is final character of a postcode`() {
+        assertEquals("CP", formatterSV.format("CP"))
+        assertEquals("CP", formatterSV.format("CP "))
     }
 
 }

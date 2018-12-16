@@ -7,7 +7,6 @@ class Formatter(locale: Locale) {
     private val nonAlphanumeric = "[^a-zA-Z0-9]".toRegex()
     private val leadingTrailingNonAlphanumeric = "(^[^a-zA-Z0-9]+)|([^a-zA-Z0-9]+$)".toRegex()
     private val validator = Validator(locale)
-    private val separator = "-"
 
     fun format(postcode: String): String {
         val postcodeTrimmed = postcode.replace(leadingTrailingNonAlphanumeric, "")
@@ -15,12 +14,13 @@ class Formatter(locale: Locale) {
         val postcodeStripped = postcode.replace(nonAlphanumeric, "")
         if (validator.partialValidate(postcodeStripped)) return postcodeStripped
 
-        val newSeparatorLoc = findSeparatorLocation(postcodeStripped)
-        if (newSeparatorLoc != -1) {
-            val postcodeSeparated = postcodeStripped.substring(0, newSeparatorLoc) + separator + postcodeStripped.substring(newSeparatorLoc)
-            if (validator.partialValidate(postcodeSeparated)) {
-                return postcodeSeparated
-            }
+        val separatorLoc = findSeparatorLocation(postcodeStripped)
+        if (separatorLoc != -1) {
+            val postcodeDashSeparated = postcodeStripped.insert("-", separatorLoc)
+            if (validator.partialValidate(postcodeDashSeparated)) return postcodeDashSeparated
+
+            val postcodeSpaceSeparated = postcodeStripped.insert(" ", separatorLoc)
+            if (validator.partialValidate(postcodeSpaceSeparated)) return postcodeSpaceSeparated
         }
 
         throw CouldNotFormatException()
@@ -56,4 +56,8 @@ class Formatter(locale: Locale) {
     }
 
     class CouldNotFormatException : RuntimeException()
+}
+
+private fun String.insert(string: String, location: Int): String {
+    return substring(0, location) + string + substring(location)
 }
