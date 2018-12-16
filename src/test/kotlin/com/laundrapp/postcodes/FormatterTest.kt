@@ -37,4 +37,28 @@ class FormatterTest {
         assertEquals("CP", formatterSV.format("CP "))
     }
 
+    @Test
+    fun `Lower case input returns upper case output`(){
+        assertEquals("CP 1115", formatterSV.format("cp 1115"))
+        assertEquals("LV-1234", formatterLV.format("lv-1234"))
+    }
+
+    @Test
+    fun `Lower case and trimming formats correctly`() {
+        assertEquals("CP 1115", formatterSV.format("cp 1115;"))
+        assertEquals("LV-1234", formatterLV.format("#lv-1234"))
+    }
+
+    @Test
+    fun `Lower case and stripping formats correctly`() {
+        assertEquals("CP 1115", formatterSV.format("cp 11'15"))
+        assertEquals("LV-1234", formatterLV.format("#lv-1~234"))
+    }
+
+    @Test
+    fun `Lower case and formatting formats correctly`() {
+        assertEquals("CP 1115", formatterSV.format("cp1115"))
+        assertEquals("LV-123", formatterLV.format("lv123"))
+    }
+
 }
