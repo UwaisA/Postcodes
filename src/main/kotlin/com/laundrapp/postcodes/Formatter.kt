@@ -2,7 +2,7 @@ package com.laundrapp.postcodes
 
 import java.util.*
 
-class Formatter(private val locale: Locale) {
+internal class Formatter(private val locale: Locale) {
 
     private val nonAlphanumeric = "[^a-zA-Z0-9]".toRegex()
     private val leadingTrailingNonAlphanumeric = "(^[^a-zA-Z0-9]+)|([^a-zA-Z0-9]+$)".toRegex()

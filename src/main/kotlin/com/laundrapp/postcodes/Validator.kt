@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class Validator(locale: Locale) {
+internal class Validator(locale: Locale) {
     private val localisedPattern = Pattern.compile(getLocaleRegex(locale))
     private val partialValidateMemo = ConcurrentHashMap<String, Boolean>()
     private val validateMemo = ConcurrentHashMap<String, Boolean>()
