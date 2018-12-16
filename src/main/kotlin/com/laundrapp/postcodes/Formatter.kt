@@ -2,25 +2,26 @@ package com.laundrapp.postcodes
 
 import java.util.*
 
-class Formatter(locale: Locale) {
+internal class Formatter(private val locale: Locale) {
 
     private val nonAlphanumeric = "[^a-zA-Z0-9]".toRegex()
+    private val leadingTrailingNonAlphanumeric = "(^[^a-zA-Z0-9]+)|([^a-zA-Z0-9]+$)".toRegex()
     private val validator = Validator(locale)
-    private val separator = "-"
 
     fun format(postcode: String): String {
-        val postcodeStripped = postcode.replace(nonAlphanumeric, "")
+        val postcodeUpperCase = postcode.toUpperCase(locale)
+        val postcodeTrimmed = postcodeUpperCase.replace(leadingTrailingNonAlphanumeric, "")
+        if (validator.partialValidate(postcodeTrimmed)) return postcodeTrimmed
+        val postcodeStripped = postcodeUpperCase.replace(nonAlphanumeric, "")
         if (validator.partialValidate(postcodeStripped)) return postcodeStripped
 
-        var postcodeOutput = postcodeStripped
-        var newSeparatorLoc = findSeparatorLocation(postcodeOutput)
-        while (newSeparatorLoc != -1) {
-            postcodeOutput = postcodeOutput.substring(0, newSeparatorLoc) + separator + postcodeOutput.substring(newSeparatorLoc)
-            if (validator.partialValidate(postcodeOutput)) {
-                return postcodeOutput
-            } else {
-                newSeparatorLoc = findSeparatorLocation(postcodeOutput)
-            }
+        val separatorLoc = findSeparatorLocation(postcodeStripped)
+        if (separatorLoc != -1) {
+            val postcodeDashSeparated = postcodeStripped.insert("-", separatorLoc)
+            if (validator.partialValidate(postcodeDashSeparated)) return postcodeDashSeparated
+
+            val postcodeSpaceSeparated = postcodeStripped.insert(" ", separatorLoc)
+            if (validator.partialValidate(postcodeSpaceSeparated)) return postcodeSpaceSeparated
         }
 
         throw CouldNotFormatException()
@@ -56,4 +57,8 @@ class Formatter(locale: Locale) {
     }
 
     class CouldNotFormatException : RuntimeException()
+}
+
+private fun String.insert(string: String, location: Int): String {
+    return substring(0, location) + string + substring(location)
 }
