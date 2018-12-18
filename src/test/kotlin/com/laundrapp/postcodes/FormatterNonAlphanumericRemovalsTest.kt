@@ -1,13 +1,12 @@
 package com.laundrapp.postcodes
 
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.*
 
 class FormatterNonAlphanumericRemovalsTest {
 
-    private val formatterUS = Formatter(Locale.US)
+    private val formatterUS = Formatter(Validator(Locale.US))
 
     @Test
     fun `Leading non-alphanumeric characters removed from formatted postcode with separator`() {

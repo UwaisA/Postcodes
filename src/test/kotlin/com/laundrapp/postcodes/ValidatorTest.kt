@@ -63,7 +63,7 @@ class ValidatorTest {
         assertTrue(validatorUK.partialValidate("E1 1"))
         assertTrue(validatorUK.partialValidate("E1 "))
         assertTrue(validatorUK.partialValidate("E"))
-        assertTrue(validatorUK.partialValidate("WC2H9"))
+        assertTrue(validatorUK.partialValidate("WC2H 9"))
         assertTrue(validatorUK.partialValidate("WC2"))
         assertTrue(validatorUK.partialValidate(""))
         assertTrue(validatorUK.partialValidate("LD5A 5E"))

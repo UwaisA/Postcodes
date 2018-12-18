@@ -2,10 +2,10 @@ package com.laundrapp.postcodes
 
 import java.util.*
 
-class PostcodeUtil(locale: Locale = Locale.getDefault()) {
+class PostcodeUtil(locale: Locale = Locale.getDefault(), options: Options = Options(true)) {
 
-    private val validator = Validator(locale)
-    private val formatter = Formatter(locale)
+    private val validator = Validator(locale, options)
+    private val formatter = Formatter(validator)
 
     /**
      * @return A formatted representation of the input postcode
@@ -27,4 +27,7 @@ class PostcodeUtil(locale: Locale = Locale.getDefault()) {
      * @return True if and only if the postcode could have characters added to make it a valid postcode
      */
     fun isValidPartialPostcode(postcode: String): Boolean = validator.partialValidate(postcode)
+
+    class Options(val includeOptionalSeparators: Boolean)
+
 }

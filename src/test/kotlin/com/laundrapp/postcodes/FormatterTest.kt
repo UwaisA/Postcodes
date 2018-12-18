@@ -5,9 +5,9 @@ import org.junit.Test
 import java.util.*
 
 class FormatterTest {
-    private val formatterLV = Formatter(Locale.forLanguageTag("en-LV"))
-    private val formatterUS = Formatter(Locale.US)
-    private val formatterSV = Formatter(Locale.forLanguageTag("en-SV"))
+    private val formatterLV = Formatter(Validator(Locale.forLanguageTag("en-LV")))
+    private val formatterUS = Formatter(Validator( Locale.US))
+    private val formatterSV = Formatter(Validator(Locale.forLanguageTag("en-SV")))
 
     @Test
     fun `'-' added to postcode where needed`() {
