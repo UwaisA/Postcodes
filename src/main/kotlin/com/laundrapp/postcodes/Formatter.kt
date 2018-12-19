@@ -54,8 +54,8 @@ internal class Formatter(private val validator: Validator) {
     }
 
     class CouldNotFormatException : RuntimeException()
-}
 
-private fun String.insert(string: String, location: Int): String {
-    return substring(0, location) + string + substring(location)
+    private fun String.insert(string: String, location: Int): String {
+        return substring(0, location) + string + substring(location)
+    }
 }

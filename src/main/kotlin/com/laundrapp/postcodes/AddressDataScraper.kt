@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
         it != null
     }?.toProperties(".regexp")
 
-    postcodeProperties?.storeOrdered(File(RegexRetriever.regexesFileLocation).outputStream(), null)
+    postcodeProperties?.storeOrdered(getResourceFile(RegexRetriever.regexesFileName).outputStream(), null)
 }
 
 private fun getPostcodeRegex(countryCode: String): String? {
@@ -54,4 +54,8 @@ private fun Map<*, *>.toProperties(appendToKey: String): Properties {
         (key, value) -> properties[key.toString() + appendToKey] = value.toString()
     }
     return properties
+}
+
+private fun getResourceFile(fileName: String): File {
+    return File("src/main/resources$fileName")
 }
