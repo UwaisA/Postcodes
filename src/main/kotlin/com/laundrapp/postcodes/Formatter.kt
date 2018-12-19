@@ -1,15 +1,12 @@
 package com.laundrapp.postcodes
 
-import java.util.*
-
-internal class Formatter(private val locale: Locale) {
+internal class Formatter(private val validator: Validator) {
 
     private val nonAlphanumeric = "[^a-zA-Z0-9]".toRegex()
     private val leadingTrailingNonAlphanumeric = "(^[^a-zA-Z0-9]+)|([^a-zA-Z0-9]+$)".toRegex()
-    private val validator = Validator(locale)
 
     fun format(postcode: String): String {
-        val postcodeUpperCase = postcode.toUpperCase(locale)
+        val postcodeUpperCase = postcode.toUpperCase()
         val postcodeTrimmed = postcodeUpperCase.replace(leadingTrailingNonAlphanumeric, "")
         if (validator.partialValidate(postcodeTrimmed)) return postcodeTrimmed
         val postcodeStripped = postcodeUpperCase.replace(nonAlphanumeric, "")
