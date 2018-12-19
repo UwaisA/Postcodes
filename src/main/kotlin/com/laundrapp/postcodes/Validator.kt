@@ -29,8 +29,8 @@ internal class Validator(locale: Locale, options: PostcodeUtil.Options = Postcod
             partialValidateMemo[postcode] = it
         }
     }
-}
 
-private fun Matcher.partiallyMatches(): Boolean {
-    return this.matches() || this.hitEnd()
+    private fun Matcher.partiallyMatches(): Boolean {
+        return this.matches() || this.hitEnd()
+    }
 }
