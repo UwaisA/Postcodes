@@ -57,5 +57,5 @@ private fun Map<*, *>.toProperties(appendToKey: String): Properties {
 }
 
 private fun getResourceFile(fileName: String): File {
-    return File("src/main/resources/$fileName")
+    return File("src/main/resources$fileName")
 }

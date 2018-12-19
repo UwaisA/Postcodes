@@ -1,15 +1,15 @@
 package com.laundrapp.postcodes
 
-import java.io.File
+import java.io.InputStream
 import java.util.*
 
 
 object RegexRetriever {
-    internal const val regexesFileLocation = "postcode-regexes.properties"
+    internal const val regexesFileName = "/postcode-regexes.properties"
     private val regexMap: Properties = Properties()
 
     init {
-        regexMap.load(File(regexesFileLocation).inputStream())
+        regexMap.load(getResourceAsStream(regexesFileName))
     }
 
     fun getLocaleRegex(locale: Locale): String {
@@ -22,5 +22,9 @@ object RegexRetriever {
         if (!regexMap.containsKey(countryKey)) {
             throw IllegalArgumentException("No postcode rules found for country code: $countryKey")
         }
+    }
+
+    private fun getResourceAsStream(fileName: String): InputStream {
+        return RegexRetriever::class.java.getResourceAsStream(fileName)
     }
 }
