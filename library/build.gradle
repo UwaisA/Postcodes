@@ -20,10 +20,6 @@ dependencies {
     testCompile "junit:junit:4.4"
 }
 
-jar {
-    exclude "**/AddressDataScraper*"
-}
-
 compileKotlin {
     kotlinOptions.jvmTarget = "1.6"
 }
