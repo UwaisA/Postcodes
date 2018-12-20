@@ -1,4 +1,4 @@
-package com.laundrapp.postcodes
+package com.laundrapp.util
 
 import com.google.gson.JsonParser
 import java.io.File
@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
         it != null
     }?.toProperties(".regexp")
 
-    postcodeProperties?.storeOrdered(getResourceFile(RegexRetriever.regexesFileName).outputStream(), null)
+    postcodeProperties?.storeOrdered(getResourceFile("/postcode-regexes.properties").outputStream(), null)
 }
 
 private fun getPostcodeRegex(countryCode: String): String? {
@@ -57,5 +57,5 @@ private fun Map<*, *>.toProperties(appendToKey: String): Properties {
 }
 
 private fun getResourceFile(fileName: String): File {
-    return File("src/main/resources$fileName")
+    return File("library/src/main/resources$fileName")
 }
