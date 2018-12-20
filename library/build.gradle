@@ -9,9 +9,6 @@ buildscript {
     }
 }
 
-group 'com.laundrapp'
-version '0.1'
-
 apply plugin: 'kotlin'
 
 repositories {
