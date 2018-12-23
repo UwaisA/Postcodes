@@ -8,17 +8,17 @@ internal class Formatter(private val validator: Validator) {
     fun format(postcode: CursoredString): CursoredString {
         val postcodeUpperCase = postcode.string.toUpperCase()
         val postcodeTrimmed = postcodeUpperCase.replace(leadingTrailingNonAlphanumeric, "")
-        if (validator.partialValidate(postcodeTrimmed)) return CursoredString(postcodeTrimmed, 0)
+        if (validator.partialValidate(postcodeTrimmed)) return CursoredString(postcodeTrimmed, postcode.cursorPosition)
         val postcodeStripped = postcodeUpperCase.replace(nonAlphanumeric, "")
-        if (validator.partialValidate(postcodeStripped)) return CursoredString(postcodeStripped, 0)
+        if (validator.partialValidate(postcodeStripped)) return CursoredString(postcodeStripped, postcode.cursorPosition)
 
         val separatorLoc = findSeparatorLocation(postcodeStripped)
         if (separatorLoc != -1) {
             val postcodeDashSeparated = postcodeStripped.insert("-", separatorLoc)
-            if (validator.partialValidate(postcodeDashSeparated)) return CursoredString(postcodeDashSeparated, 0)
+            if (validator.partialValidate(postcodeDashSeparated)) return CursoredString(postcodeDashSeparated, postcode.cursorPosition)
 
             val postcodeSpaceSeparated = postcodeStripped.insert(" ", separatorLoc)
-            if (validator.partialValidate(postcodeSpaceSeparated)) return CursoredString(postcodeSpaceSeparated, 0)
+            if (validator.partialValidate(postcodeSpaceSeparated)) return CursoredString(postcodeSpaceSeparated, postcode.cursorPosition)
         }
 
         throw CouldNotFormatException()
