@@ -20,6 +20,8 @@ internal class Formatter(private val validator: Validator) {
 
         val separatorLoc = findSeparatorLocation(postcodeStripped)
         if (separatorLoc != -1) {
+            if (separatorLoc < outputCursorPosition) outputCursorPosition++
+
             val postcodeDashSeparated = postcodeStripped.insert("-", separatorLoc)
             if (validator.partialValidate(postcodeDashSeparated)) return CursoredString(postcodeDashSeparated, outputCursorPosition)
 

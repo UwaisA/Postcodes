@@ -61,4 +61,25 @@ class FormatterNonZeroCursorPosition {
     fun `Postcode input sanitised, partial reduction to position`() {
         assertEquals(CursoredString("12345", 3), formatterUS.format(CursoredString("1#2#34#5#", 5)))
     }
+
+    @Test
+    fun `Postcode input formatted, no change to position`() {
+        assertEquals(CursoredString("12345-67", 4), formatterUS.format(CursoredString("1234567", 4)))
+    }
+
+    @Test
+    fun `Postcode input formatted, input cursor on separator location`() {
+        assertEquals(CursoredString("12345-67", 5), formatterUS.format(CursoredString("1234567", 5)))
+    }
+
+    @Test
+    fun `Postcode input formatted, input cursor after separator location`() {
+        assertEquals(CursoredString("12345-67", 7), formatterUS.format(CursoredString("1234567", 6)))
+    }
+
+    @Test
+    fun `Incorrectly separated postcode input, input cursor on separator location`() {
+        assertEquals(CursoredString("12345-67", 5), formatterUS.format(CursoredString("12345#67", 6)))
+        assertEquals(CursoredString("12345-67", 7), formatterUS.format(CursoredString("123+45+67", 8)))
+    }
 }
