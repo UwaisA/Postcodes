@@ -5,20 +5,20 @@ internal class Formatter(private val validator: Validator) {
     private val nonAlphanumeric = "[^a-zA-Z0-9]".toRegex()
     private val leadingTrailingNonAlphanumeric = "(^[^a-zA-Z0-9]+)|([^a-zA-Z0-9]+$)".toRegex()
 
-    fun format(postcode: String): String {
-        val postcodeUpperCase = postcode.toUpperCase()
+    fun format(postcode: CursoredString): CursoredString {
+        val postcodeUpperCase = postcode.string.toUpperCase()
         val postcodeTrimmed = postcodeUpperCase.replace(leadingTrailingNonAlphanumeric, "")
-        if (validator.partialValidate(postcodeTrimmed)) return postcodeTrimmed
+        if (validator.partialValidate(postcodeTrimmed)) return CursoredString(postcodeTrimmed, 0)
         val postcodeStripped = postcodeUpperCase.replace(nonAlphanumeric, "")
-        if (validator.partialValidate(postcodeStripped)) return postcodeStripped
+        if (validator.partialValidate(postcodeStripped)) return CursoredString(postcodeStripped, 0)
 
         val separatorLoc = findSeparatorLocation(postcodeStripped)
         if (separatorLoc != -1) {
             val postcodeDashSeparated = postcodeStripped.insert("-", separatorLoc)
-            if (validator.partialValidate(postcodeDashSeparated)) return postcodeDashSeparated
+            if (validator.partialValidate(postcodeDashSeparated)) return CursoredString(postcodeDashSeparated, 0)
 
             val postcodeSpaceSeparated = postcodeStripped.insert(" ", separatorLoc)
-            if (validator.partialValidate(postcodeSpaceSeparated)) return postcodeSpaceSeparated
+            if (validator.partialValidate(postcodeSpaceSeparated)) return CursoredString(postcodeSpaceSeparated, 0)
         }
 
         throw CouldNotFormatException()

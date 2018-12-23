@@ -10,20 +10,20 @@ class FormatterNoFormattingRequiredTest {
 
     @Test
     fun `Empty string formats`() {
-        assertEquals("", formatterUS.format(""))
+        assertEquals(CursoredString("", 0), formatterUS.format(CursoredString("", 0)))
     }
 
     @Test
     fun `Valid partial postcode is returned unchanged`() {
-        assertEquals("12", formatterUS.format("12"))
-        assertEquals("12345-12", formatterUS.format("12345-12"))
-        assertEquals("12345 1", formatterUS.format("12345 1"))
+        assertEquals(CursoredString("12", 0), formatterUS.format(CursoredString("12", 0)))
+        assertEquals(CursoredString("12345-12", 0), formatterUS.format(CursoredString("12345-12", 0)))
+        assertEquals(CursoredString("12345 1", 0), formatterUS.format(CursoredString("12345 1", 0)))
     }
 
     @Test
     fun `Valid full postcode is returned unchanged`() {
-        assertEquals("12345", formatterUS.format("12345"))
-        assertEquals("12345-1234", formatterUS.format("12345-1234"))
-        assertEquals("12345 1234", formatterUS.format("12345 1234"))
+        assertEquals(CursoredString("12345", 0), formatterUS.format(CursoredString("12345", 0)))
+        assertEquals(CursoredString("12345-1234", 0), formatterUS.format(CursoredString("12345-1234", 0)))
+        assertEquals(CursoredString("12345 1234", 0), formatterUS.format(CursoredString("12345 1234", 0)))
     }
 }
