@@ -11,6 +11,9 @@ class PostcodeUtil(locale: Locale = Locale.getDefault(), options: Options = Opti
      * @return A formatted representation of the input postcode
      */
     fun format(postcode: String, cursorPosition: Int = 0): PostcodeResult {
+        if (cursorPosition < 0 || cursorPosition > postcode.length) {
+            throw IndexOutOfBoundsException("cursorPosition: \"$cursorPosition\" invalid for postcode: \"$postcode\"")
+        }
         return try {
             PostcodeResult(formatter.format(CursoredString(postcode, cursorPosition)).string, cursorPosition, true)
         } catch (ex: Formatter.CouldNotFormatException) {
