@@ -46,4 +46,19 @@ class FormatterNonZeroCursorPosition {
     fun `Postcode input end sanitised, partial reduction to position`() {
         assertEquals(CursoredString("12345", 5), formatterUS.format(CursoredString("12345######", 7)))
     }
+
+    @Test
+    fun `Postcode input sanitised, no reduction to position`() {
+        assertEquals(CursoredString("12345", 2), formatterUS.format(CursoredString("1234##5", 2)))
+    }
+
+    @Test
+    fun `Postcode input sanitised, reduction to position`() {
+        assertEquals(CursoredString("12345", 4), formatterUS.format(CursoredString("1####2345", 8)))
+    }
+
+    @Test
+    fun `Postcode input sanitised, partial reduction to position`() {
+        assertEquals(CursoredString("12345", 3), formatterUS.format(CursoredString("1#2#34#5#", 5)))
+    }
 }

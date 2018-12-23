@@ -14,7 +14,8 @@ internal class Formatter(private val validator: Validator) {
         val postcodeTrimmed = postcodeTrimmedStart.replace(trailingNonAlphanumeric, "")
         outputCursorPosition -= Math.max(0, outputCursorPosition - postcodeTrimmed.length)
         if (validator.partialValidate(postcodeTrimmed)) return CursoredString(postcodeTrimmed, outputCursorPosition)
-        val postcodeStripped = postcodeUpperCase.replace(nonAlphanumeric, "")
+        val postcodeStripped = postcodeTrimmed.replace(nonAlphanumeric, "")
+        outputCursorPosition = postcodeTrimmed.substring(0, outputCursorPosition).replace(nonAlphanumeric, "").length
         if (validator.partialValidate(postcodeStripped)) return CursoredString(postcodeStripped, outputCursorPosition)
 
         val separatorLoc = findSeparatorLocation(postcodeStripped)
