@@ -6,59 +6,59 @@ import java.util.*
 
 class FormatterTest {
     private val formatterLV = Formatter(Validator(Locale.forLanguageTag("en-LV")))
-    private val formatterUS = Formatter(Validator( Locale.US))
+    private val formatterUS = Formatter(Validator(Locale.US))
     private val formatterSV = Formatter(Validator(Locale.forLanguageTag("en-SV")))
 
     @Test
     fun `'-' added to postcode where needed`() {
-        assertEquals("LV-1234", formatterLV.format("LV1234"))
-        assertEquals("LV-12", formatterLV.format("LV12"))
-        assertEquals("12345-6", formatterUS.format("123456"))
-        assertEquals("12345-6789", formatterUS.format("123456789"))
+        assertEquals("LV-1234", formatterLV.format(CursoredString("LV1234", 0)).string)
+        assertEquals("LV-12", formatterLV.format(CursoredString("LV12", 0)).string)
+        assertEquals("12345-6", formatterUS.format(CursoredString("123456", 0)).string)
+        assertEquals("12345-6789", formatterUS.format(CursoredString("123456789", 0)).string)
     }
 
     @Test
     fun `'-' not inserted when it is final character of a postcode`() {
-        assertEquals("LV", formatterLV.format("LV"))
-        assertEquals("LV", formatterLV.format("LV-"))
-        assertEquals("12345", formatterUS.format("12345"))
-        assertEquals("12345", formatterUS.format("12345-"))
+        assertEquals("LV", formatterLV.format(CursoredString("LV", 0)).string)
+        assertEquals("LV", formatterLV.format(CursoredString("LV-", 0)).string)
+        assertEquals("12345", formatterUS.format(CursoredString("12345", 0)).string)
+        assertEquals("12345", formatterUS.format(CursoredString("12345-", 0)).string)
     }
 
     @Test
     fun `' ' added to postcode where needed`() {
-        assertEquals("CP 1115", formatterSV.format("CP1115"))
-        assertEquals("CP 111", formatterSV.format("CP111"))
+        assertEquals("CP 1115", formatterSV.format(CursoredString("CP1115", 0)).string)
+        assertEquals("CP 111", formatterSV.format(CursoredString("CP111", 0)).string)
     }
 
     @Test
     fun `' ' not inserted when it is final character of a postcode`() {
-        assertEquals("CP", formatterSV.format("CP"))
-        assertEquals("CP", formatterSV.format("CP "))
+        assertEquals("CP", formatterSV.format(CursoredString("CP", 0)).string)
+        assertEquals("CP", formatterSV.format(CursoredString("CP ", 0)).string)
     }
 
     @Test
     fun `Lower case input returns upper case output`(){
-        assertEquals("CP 1115", formatterSV.format("cp 1115"))
-        assertEquals("LV-1234", formatterLV.format("lv-1234"))
+        assertEquals("CP 1115", formatterSV.format(CursoredString("cp 1115", 0)).string)
+        assertEquals("LV-1234", formatterLV.format(CursoredString("lv-1234", 0)).string)
     }
 
     @Test
     fun `Lower case and trimming formats correctly`() {
-        assertEquals("CP 1115", formatterSV.format("cp 1115;"))
-        assertEquals("LV-1234", formatterLV.format("#lv-1234"))
+        assertEquals("CP 1115", formatterSV.format(CursoredString("cp 1115;", 0)).string)
+        assertEquals("LV-1234", formatterLV.format(CursoredString("#lv-1234", 0)).string)
     }
 
     @Test
     fun `Lower case and stripping formats correctly`() {
-        assertEquals("CP 1115", formatterSV.format("cp 11'15"))
-        assertEquals("LV-1234", formatterLV.format("#lv-1~234"))
+        assertEquals("CP 1115", formatterSV.format(CursoredString("cp 11'15", 0)).string)
+        assertEquals("LV-1234", formatterLV.format(CursoredString("#lv-1~234", 0)).string)
     }
 
     @Test
     fun `Lower case and formatting formats correctly`() {
-        assertEquals("CP 1115", formatterSV.format("cp1115"))
-        assertEquals("LV-123", formatterLV.format("lv123"))
+        assertEquals("CP 1115", formatterSV.format(CursoredString("cp1115", 0)).string)
+        assertEquals("LV-123", formatterLV.format(CursoredString("lv123", 0)).string)
     }
 
 }

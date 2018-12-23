@@ -3,22 +3,30 @@ package com.laundrapp.postcodes
 internal class Formatter(private val validator: Validator) {
 
     private val nonAlphanumeric = "[^a-zA-Z0-9]".toRegex()
-    private val leadingTrailingNonAlphanumeric = "(^[^a-zA-Z0-9]+)|([^a-zA-Z0-9]+$)".toRegex()
+    private val leadingNonAlphanumeric = "(^[^a-zA-Z0-9]+)".toRegex()
+    private val trailingNonAlphanumeric = "([^a-zA-Z0-9]+\$)".toRegex()
 
-    fun format(postcode: String): String {
-        val postcodeUpperCase = postcode.toUpperCase()
-        val postcodeTrimmed = postcodeUpperCase.replace(leadingTrailingNonAlphanumeric, "")
-        if (validator.partialValidate(postcodeTrimmed)) return postcodeTrimmed
-        val postcodeStripped = postcodeUpperCase.replace(nonAlphanumeric, "")
-        if (validator.partialValidate(postcodeStripped)) return postcodeStripped
+    fun format(postcode: CursoredString): CursoredString {
+        var outputCursorPosition = postcode.cursorPosition
+        val postcodeUpperCase = postcode.string.toUpperCase()
+        val postcodeTrimmedStart = postcodeUpperCase.replace(leadingNonAlphanumeric, "")
+        outputCursorPosition -= Math.min(postcodeUpperCase.length - postcodeTrimmedStart.length, outputCursorPosition)
+        val postcodeTrimmed = postcodeTrimmedStart.replace(trailingNonAlphanumeric, "")
+        outputCursorPosition -= Math.max(0, outputCursorPosition - postcodeTrimmed.length)
+        if (validator.partialValidate(postcodeTrimmed)) return CursoredString(postcodeTrimmed, outputCursorPosition)
+        val postcodeStripped = postcodeTrimmed.replace(nonAlphanumeric, "")
+        outputCursorPosition = postcodeTrimmed.substring(0, outputCursorPosition).replace(nonAlphanumeric, "").length
+        if (validator.partialValidate(postcodeStripped)) return CursoredString(postcodeStripped, outputCursorPosition)
 
         val separatorLoc = findSeparatorLocation(postcodeStripped)
         if (separatorLoc != -1) {
+            if (separatorLoc < outputCursorPosition) outputCursorPosition++
+
             val postcodeDashSeparated = postcodeStripped.insert("-", separatorLoc)
-            if (validator.partialValidate(postcodeDashSeparated)) return postcodeDashSeparated
+            if (validator.partialValidate(postcodeDashSeparated)) return CursoredString(postcodeDashSeparated, outputCursorPosition)
 
             val postcodeSpaceSeparated = postcodeStripped.insert(" ", separatorLoc)
-            if (validator.partialValidate(postcodeSpaceSeparated)) return postcodeSpaceSeparated
+            if (validator.partialValidate(postcodeSpaceSeparated)) return CursoredString(postcodeSpaceSeparated, outputCursorPosition)
         }
 
         throw CouldNotFormatException()

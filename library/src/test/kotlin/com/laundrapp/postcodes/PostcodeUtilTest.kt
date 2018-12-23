@@ -7,20 +7,30 @@ import java.util.*
 
 class PostcodeUtilTest {
 
+    @Test(expected = IndexOutOfBoundsException::class)
+    fun `Format cursorPosition less than 0`() {
+        PostcodeUtil(Locale.UK).format("E1 1J", -1)
+    }
+
     @Test
     fun `Format formatted response`() {
-        assertEquals(PostcodeResult("12345-6", true),
+        assertEquals(PostcodeResult("12345-6", 0, true),
                 PostcodeUtil(Locale.US).format("123456"))
-        assertEquals(PostcodeResult("GIR 0A", true),
+        assertEquals(PostcodeResult("GIR 0A", 0, true),
                 PostcodeUtil(Locale.UK).format("GiR 0a"))
     }
 
     @Test
     fun `Format unformatted response`() {
-        assertEquals(PostcodeResult("1234567890", false),
+        assertEquals(PostcodeResult("1234567890", 0, false),
                 PostcodeUtil(Locale.US).format("1234567890"))
-        assertEquals(PostcodeResult("GiR 0aaa", false),
+        assertEquals(PostcodeResult("GiR 0aaa", 0, false),
                 PostcodeUtil(Locale.UK).format("GiR 0aaa"))
+    }
+
+    @Test(expected = IndexOutOfBoundsException::class)
+    fun `Format cursorPosition more than postcode length`() {
+        PostcodeUtil(Locale.UK).format("E1 1J", 6)
     }
 
     @Test
