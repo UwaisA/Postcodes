@@ -34,6 +34,11 @@ class PostcodeUtilTest {
     }
 
     @Test
+    fun `Format cursorPosition is moved`() {
+        assertEquals(5, PostcodeUtil(Locale.US).format("12345####", 9).cursorPosition)
+    }
+
+    @Test
     fun `isValidPostcode returns true for valid postcodes`() {
         assertTrue(PostcodeUtil(Locale.UK).isValidPostcode("W1A 4ZZ"))
         assertTrue(PostcodeUtil(Locale.US).isValidPostcode("01234-5678"))

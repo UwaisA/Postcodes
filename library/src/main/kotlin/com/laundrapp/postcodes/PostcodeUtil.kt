@@ -15,7 +15,8 @@ class PostcodeUtil(locale: Locale = Locale.getDefault(), options: Options = Opti
             throw IndexOutOfBoundsException("cursorPosition: \"$cursorPosition\" invalid for postcode: \"$postcode\"")
         }
         return try {
-            PostcodeResult(formatter.format(CursoredString(postcode, cursorPosition)).string, cursorPosition, true)
+            val formattedCursoredString = formatter.format(CursoredString(postcode, cursorPosition))
+            PostcodeResult(formattedCursoredString.string, formattedCursoredString.cursorPosition, true)
         } catch (ex: Formatter.CouldNotFormatException) {
             PostcodeResult(postcode, cursorPosition, false)
         }
