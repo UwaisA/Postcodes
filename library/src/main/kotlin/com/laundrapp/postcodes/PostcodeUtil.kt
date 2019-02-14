@@ -2,12 +2,13 @@ package com.laundrapp.postcodes
 
 import java.util.*
 
-class PostcodeUtil(locale: Locale = Locale.getDefault(), options: Options = Options(true)) {
+class PostcodeUtil @JvmOverloads constructor(locale: Locale = Locale.getDefault(), options: Options = Options(true)) {
 
     private val validator = Validator(locale, options)
     private val formatter = Formatter(validator)
 
     /**
+     * @throws IndexOutOfBoundsException {@code cursorPosition} is outside the length of string {@code postcode}
      * @return A formatted representation of the input postcode
      */
     fun format(postcode: String, cursorPosition: Int = 0): PostcodeResult {
