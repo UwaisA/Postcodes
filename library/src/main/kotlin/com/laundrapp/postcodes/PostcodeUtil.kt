@@ -29,7 +29,7 @@ class PostcodeUtil @JvmOverloads constructor(locale: Locale = Locale.getDefault(
     fun isValidPostcode(postcode: String): Boolean = validator.validate(postcode)
 
     /**
-     * @return True if and only if the postcode could have characters added to make it a valid postcode
+     * @return True if and only if the postcode could have characters appended to make it a valid postcode
      */
     fun isValidPartialPostcode(postcode: String): Boolean = validator.partialValidate(postcode)
 
