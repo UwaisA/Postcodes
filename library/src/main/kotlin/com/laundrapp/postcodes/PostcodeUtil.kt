@@ -37,7 +37,7 @@ class PostcodeUtil
 
     /**
      * @param postcode The string to be validated
-     * @return True if and only if the postcode could have characters appended to make it a valid postcode
+     * @return true if and only if the postcode could have characters appended to make it a valid postcode
      */
     fun isValidPartialPostcode(postcode: String): Boolean = validator.partialValidate(postcode)
 
