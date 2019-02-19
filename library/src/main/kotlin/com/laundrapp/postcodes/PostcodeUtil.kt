@@ -2,7 +2,13 @@ package com.laundrapp.postcodes
 
 import java.util.*
 
-class PostcodeUtil @JvmOverloads constructor(locale: Locale = Locale.getDefault(), options: Options = Options(true)) {
+class PostcodeUtil
+/**
+ * @param locale This country of this locale is used to determine which postcode format to use
+ * @param options Allows customisation of the formatting of postcodes
+ * @throws IllegalArgumentException This can be thrown if the provided country does not support postcodes. If
+ * relying on the default locale then catching this exception is recommended
+ */ @JvmOverloads constructor(locale: Locale = Locale.getDefault(), options: Options = Options(true)) {
 
     private val validator = Validator(locale, options)
     private val formatter = Formatter(validator)
@@ -24,11 +30,13 @@ class PostcodeUtil @JvmOverloads constructor(locale: Locale = Locale.getDefault(
     }
 
     /**
+     * @param postcode The string to be validated
      * @return True if and only if the postcode passes validation for the given country
      */
     fun isValidPostcode(postcode: String): Boolean = validator.validate(postcode)
 
     /**
+     * @param postcode The string to be validated
      * @return True if and only if the postcode could have characters appended to make it a valid postcode
      */
     fun isValidPartialPostcode(postcode: String): Boolean = validator.partialValidate(postcode)
