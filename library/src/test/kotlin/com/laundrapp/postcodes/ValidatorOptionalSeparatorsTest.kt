@@ -33,4 +33,14 @@ class ValidatorOptionalSeparatorsTest {
         assertTrue(validatorUK.validate(("M344AB")))
         assertTrue(validatorUK.partialValidate(("M344A")))
     }
+
+    @Test
+    fun `Accept either optional separators validates negatively as expected for incorrect separators`() {
+        val validatorBrazil = Validator(localeBrazil, Options(OptionalSeparator.ACCEPT_EITHER))
+        assertFalse(validatorBrazil.validate("12345 123"))
+        assertFalse(validatorBrazil.partialValidate("12345 1"))
+        val validatorUK = Validator(Locale.UK, Options(OptionalSeparator.ACCEPT_EITHER))
+        assertFalse(validatorUK.validate(("M34-4AB")))
+        assertFalse(validatorUK.partialValidate(("M34-4A")))
+    }
 }
