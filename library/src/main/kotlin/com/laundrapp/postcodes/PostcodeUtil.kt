@@ -8,7 +8,7 @@ class PostcodeUtil
  * @param options Allows customisation of the formatting of postcodes
  * @throws IllegalArgumentException This can be thrown if the provided country does not support postcodes. If
  * relying on the default locale then catching this exception is recommended
- */ @JvmOverloads constructor(locale: Locale = Locale.getDefault(), options: Options = Options(true)) {
+ */ @JvmOverloads constructor(locale: Locale = Locale.getDefault(), options: Options = Options(Options.OptionalSeparator.INCLUDE)) {
 
     private val validator = Validator(locale, options)
     private val formatter = Formatter(validator)
@@ -40,7 +40,5 @@ class PostcodeUtil
      * @return true if and only if the postcode could have characters appended to make it a valid postcode
      */
     fun isValidPartialPostcode(postcode: String): Boolean = validator.partialValidate(postcode)
-
-    class Options(val includeOptionalSeparators: Boolean)
 
 }
