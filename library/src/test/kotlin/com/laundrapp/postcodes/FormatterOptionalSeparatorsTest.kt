@@ -30,7 +30,7 @@ class FormatterOptionalSeparatorsTest {
     }
 
     @Test
-    fun `Accept either optional separators formats to change incorrect separators`() {
+    fun `Accept either optional separators formats to remove incorrect separators`() {
         val formatterBrazil = Formatter(Validator(localeBrazil, Options(OptionalSeparator.ACCEPT_EITHER)))
         assertEquals("12345123", formatterBrazil.format(CursoredString("12345 123", 0)).string)
         assertEquals("123451", formatterBrazil.format(CursoredString("12345 1", 0)).string)
