@@ -5,7 +5,7 @@ import java.util.*
 
 
 object RegexRetriever {
-    internal const val regexesFileName = "/postcode-regexes.properties"
+    private const val regexesFileName = "/postcode-regexes.properties"
     private val regexMap: Properties = Properties()
 
     init {
