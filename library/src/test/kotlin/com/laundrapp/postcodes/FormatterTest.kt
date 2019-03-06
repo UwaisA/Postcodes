@@ -1,13 +1,15 @@
 package com.laundrapp.postcodes
 
-import org.junit.Assert.assertEquals
+import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Test
 import java.util.*
+import com.laundrapp.postcodes.Options.OptionalSeparator.*
 
 class FormatterTest {
-    private val formatterLV = Formatter(Validator.create(Locale.forLanguageTag("en-LV")))
-    private val formatterUS = Formatter(Validator.create(Locale.US))
-    private val formatterSV = Formatter(Validator.create(Locale.forLanguageTag("en-SV")))
+    private val formatterLV = Formatter.create(Validator.create(Locale.forLanguageTag("en-LV")))
+    private val formatterUS = Formatter.create(Validator.create(Locale.US))
+    private val formatterSV = Formatter.create(Validator.create(Locale.forLanguageTag("en-SV")))
 
     @Test
     fun `'-' added to postcode where needed`() {
@@ -59,6 +61,16 @@ class FormatterTest {
     fun `Lower case and formatting formats correctly`() {
         assertEquals("CP 1115", formatterSV.format(CursoredString("cp1115", 0)).string)
         assertEquals("LV-123", formatterLV.format(CursoredString("lv123", 0)).string)
+    }
+
+    @Test
+    fun `Validator recycling`() {
+        assertTrue(Formatter.create(Validator.create(Locale.US)) === Formatter.create(Validator.create(Locale.US)))
+    }
+
+    @Test
+    fun `Validator recycling for optional params`() {
+        assertTrue(Formatter.create(Validator.create(Locale.US, Options(INCLUDE))) === Formatter.create(Validator.create(Locale.US)))
     }
 
 }

@@ -1,6 +1,8 @@
 package com.laundrapp.postcodes
 
-internal class Formatter(private val validator: Validator) {
+import java.util.concurrent.ConcurrentHashMap
+
+internal class Formatter private constructor(private val validator: Validator) {
 
     private val nonAlphanumeric = "[^a-zA-Z0-9]".toRegex()
     private val leadingNonAlphanumeric = "(^[^a-zA-Z0-9]+)".toRegex()
@@ -59,6 +61,16 @@ internal class Formatter(private val validator: Validator) {
             return middle
         }
         return -1
+    }
+
+    companion object {
+        private val formatterMemo = ConcurrentHashMap<Validator, Formatter>()
+
+        fun create(validator: Validator): Formatter {
+            return formatterMemo[validator] ?: Formatter(validator).also {
+                formatterMemo[validator] = it
+            }
+        }
     }
 
     class CouldNotFormatException : RuntimeException()

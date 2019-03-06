@@ -6,7 +6,7 @@ import java.util.*
 
 class FormatterNonAlphanumericRemovalsTest {
 
-    private val formatterUS = Formatter(Validator.create(Locale.US))
+    private val formatterUS = Formatter.create(Validator.create(Locale.US))
 
     @Test
     fun `Leading non-alphanumeric characters removed from formatted postcode with separator`() {

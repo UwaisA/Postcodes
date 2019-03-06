@@ -11,7 +11,7 @@ class PostcodeUtil
  */ @JvmOverloads constructor(locale: Locale = Locale.getDefault(), options: Options = Options(Options.OptionalSeparator.INCLUDE)) {
 
     private val validator = Validator.create(locale, options)
-    private val formatter = Formatter(validator)
+    private val formatter = Formatter.create(validator)
 
     /**
      * @throws IndexOutOfBoundsException {@code cursorPosition} is outside the length of string {@code postcode}
