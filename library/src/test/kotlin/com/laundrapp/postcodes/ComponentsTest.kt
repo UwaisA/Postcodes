@@ -3,6 +3,7 @@ package com.laundrapp.postcodes
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.*
+import com.laundrapp.postcodes.Options.OptionalSeparator.*
 
 class ComponentsTest {
 
@@ -52,6 +53,30 @@ class ComponentsTest {
         assertEquals(
                 "4AB",
                 Components("M34 4AB", Validator(Locale.UK)).minor
+        )
+    }
+
+    @Test
+    fun `Can get major postcode from input without separator`() {
+        assertEquals(
+                "12345",
+                Components("12345678", Validator(Locale("pt", "BR"), Options(EXCLUDE))).major
+        )
+        assertEquals(
+                "M34",
+                Components("M344AB", Validator(Locale.UK, Options(EXCLUDE))).major
+        )
+    }
+
+    @Test
+    fun `Can get minor postcode from input without separator`() {
+        assertEquals(
+                "6789",
+                Components("12345678", Validator(Locale("pt", "BR"), Options(EXCLUDE))).minor
+        )
+        assertEquals(
+                "4AB",
+                Components("M344AB", Validator(Locale.UK, Options(EXCLUDE))).minor
         )
     }
 }
