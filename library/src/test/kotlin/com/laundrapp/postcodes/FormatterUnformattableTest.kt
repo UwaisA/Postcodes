@@ -5,9 +5,9 @@ import java.util.*
 
 class FormatterUnformattableTest {
 
-    private val formatterDE = Formatter(Validator(Locale.GERMANY))
-    private val formatterUS = Formatter(Validator(Locale.US))
-    private val formatterUK = Formatter(Validator(Locale.UK))
+    private val formatterDE = Formatter(Validator.create(Locale.GERMANY))
+    private val formatterUS = Formatter(Validator.create(Locale.US))
+    private val formatterUK = Formatter(Validator.create(Locale.UK))
 
     @Test(expected = Formatter.CouldNotFormatException::class)
     fun `Too long UK postcode throws CouldNotFormatException`() {

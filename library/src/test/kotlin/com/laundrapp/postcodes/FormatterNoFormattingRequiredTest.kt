@@ -6,7 +6,7 @@ import java.util.*
 
 class FormatterNoFormattingRequiredTest {
 
-    private val formatterUS = Formatter(Validator(Locale.US))
+    private val formatterUS = Formatter(Validator.create(Locale.US))
 
     @Test
     fun `Empty string formats`() {

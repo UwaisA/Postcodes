@@ -9,26 +9,26 @@ class ComponentsTest {
 
     @Test(expected = IllegalArgumentException::class)
     fun `IllegalArgumentException for invalid postcode`() {
-        Components("123a", Validator(Locale.US))
+        Components("123a", Validator.create(Locale.US))
     }
 
     @Test
     fun `Successful construction for valid postcode`() {
-        Components("123", Validator(Locale.US))
-        Components("12345-6789", Validator(Locale.US))
-        Components("M34 4AB", Validator(Locale.UK))
-        Components("M34 4AB", Validator(Locale.UK))
+        Components("123", Validator.create(Locale.US))
+        Components("12345-6789", Validator.create(Locale.US))
+        Components("M34 4AB", Validator.create(Locale.UK))
+        Components("M34 4AB", Validator.create(Locale.UK))
     }
 
     @Test
     fun `Can get postcode`() {
         assertEquals(
                 "123",
-                Components("123", Validator(Locale.US)).postcode
+                Components("123", Validator.create(Locale.US)).postcode
         )
         assertEquals(
                 "M34 4AB",
-                Components("M34 4AB", Validator(Locale.UK)).postcode
+                Components("M34 4AB", Validator.create(Locale.UK)).postcode
         )
     }
 
@@ -36,11 +36,11 @@ class ComponentsTest {
     fun `Can get major postcode`() {
         assertEquals(
                 "12345",
-                Components("12345 123", Validator(Locale.US)).major
+                Components("12345 123", Validator.create(Locale.US)).major
         )
         assertEquals(
                 "M34",
-                Components("M34 4AB", Validator(Locale.UK)).major
+                Components("M34 4AB", Validator.create(Locale.UK)).major
         )
     }
 
@@ -48,11 +48,11 @@ class ComponentsTest {
     fun `Can get minor postcode`() {
         assertEquals(
                 "6789",
-                Components("12345 6789", Validator(Locale.US)).minor
+                Components("12345 6789", Validator.create(Locale.US)).minor
         )
         assertEquals(
                 "4AB",
-                Components("M34 4AB", Validator(Locale.UK)).minor
+                Components("M34 4AB", Validator.create(Locale.UK)).minor
         )
     }
 
@@ -60,11 +60,11 @@ class ComponentsTest {
     fun `Can get major postcode from input without separator`() {
         assertEquals(
                 "12345",
-                Components("12345678", Validator(Locale("pt", "BR"), Options(EXCLUDE))).major
+                Components("12345678", Validator.create(Locale("pt", "BR"), Options(EXCLUDE))).major
         )
         assertEquals(
                 "M34",
-                Components("M344AB", Validator(Locale.UK, Options(EXCLUDE))).major
+                Components("M344AB", Validator.create(Locale.UK, Options(EXCLUDE))).major
         )
     }
 
@@ -72,11 +72,11 @@ class ComponentsTest {
     fun `Can get minor postcode from input without separator`() {
         assertEquals(
                 "6789",
-                Components("12345678", Validator(Locale("pt", "BR"), Options(EXCLUDE))).minor
+                Components("12345678", Validator.create(Locale("pt", "BR"), Options(EXCLUDE))).minor
         )
         assertEquals(
                 "4AB",
-                Components("M344AB", Validator(Locale.UK, Options(EXCLUDE))).minor
+                Components("M344AB", Validator.create(Locale.UK, Options(EXCLUDE))).minor
         )
     }
 }

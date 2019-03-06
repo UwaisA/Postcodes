@@ -10,7 +10,7 @@ class PostcodeUtil
  * relying on the default locale then catching this exception is recommended
  */ @JvmOverloads constructor(locale: Locale = Locale.getDefault(), options: Options = Options(Options.OptionalSeparator.INCLUDE)) {
 
-    private val validator = Validator(locale, options)
+    private val validator = Validator.create(locale, options)
     private val formatter = Formatter(validator)
 
     /**
