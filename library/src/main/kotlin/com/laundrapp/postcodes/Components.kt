@@ -61,4 +61,25 @@ class Components internal constructor(private val postcodeInput: String, private
     private fun invalidPostcodeException(): IllegalArgumentException =
             IllegalArgumentException("Input postcode $postcodeInput is invalid for locale $locale")
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Components
+
+        if (postcode != other.postcode) return false
+        if (major != other.major) return false
+        if (minor != other.minor) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = postcode.hashCode()
+        result = 31 * result + (major?.hashCode() ?: 0)
+        result = 31 * result + (minor?.hashCode() ?: 0)
+        return result
+    }
+
+
 }
