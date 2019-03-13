@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-internal class Validator(locale: Locale, options: Options = Options(INCLUDE)) {
+internal class Validator private constructor(val locale: Locale, options: Options) {
     private val localisedPattern: Pattern
     private val partialValidateMemo = ConcurrentHashMap<String, Boolean>()
     private val validateMemo = ConcurrentHashMap<String, Boolean>()
@@ -36,5 +36,18 @@ internal class Validator(locale: Locale, options: Options = Options(INCLUDE)) {
 
     private fun Matcher.partiallyMatches(): Boolean {
         return this.matches() || this.hitEnd()
+    }
+
+    companion object {
+        private val validatorMemo = ConcurrentHashMap<Params, Validator>()
+
+        fun create(locale: Locale, options: Options = Options(INCLUDE)): Validator {
+            val params = Params(locale, options)
+            return validatorMemo[params] ?: Validator(locale, options).also {
+                validatorMemo[params] = it
+            }
+        }
+
+        private data class Params(val locale: Locale, val options: Options)
     }
 }

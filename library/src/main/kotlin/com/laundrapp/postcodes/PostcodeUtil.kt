@@ -8,14 +8,15 @@ class PostcodeUtil
  * @param options Allows customisation of the formatting of postcodes
  * @throws IllegalArgumentException This can be thrown if the provided country does not support postcodes. If
  * relying on the default locale then catching this exception is recommended
- */ @JvmOverloads constructor(locale: Locale = Locale.getDefault(), options: Options = Options(Options.OptionalSeparator.INCLUDE)) {
+ */ @JvmOverloads constructor(val locale: Locale = Locale.getDefault(), options: Options = Options(Options.OptionalSeparator.INCLUDE)) {
 
-    private val validator = Validator(locale, options)
-    private val formatter = Formatter(validator)
+    private val validator = Validator.create(locale, options)
+    private val formatter = Formatter.create(validator)
 
     /**
      * @throws IndexOutOfBoundsException {@code cursorPosition} is outside the length of string {@code postcode}
-     * @return A formatted representation of the input postcode
+     * @return A {@code PostcodeResult} object containing variables to indicate if the postcode was formatted, the
+     * formatted postcode etc. See {@code PostcodeResult} for details.
      */
     fun format(postcode: String, cursorPosition: Int = 0): PostcodeResult {
         if (cursorPosition < 0 || cursorPosition > postcode.length) {
@@ -23,9 +24,10 @@ class PostcodeUtil
         }
         return try {
             val formattedCursoredString = formatter.format(CursoredString(postcode, cursorPosition))
-            PostcodeResult(formattedCursoredString.string, formattedCursoredString.cursorPosition, true)
+            PostcodeResult(formattedCursoredString.string, formattedCursoredString.cursorPosition,
+                    true, Components(formattedCursoredString.string, locale))
         } catch (ex: Formatter.CouldNotFormatException) {
-            PostcodeResult(postcode, cursorPosition, false)
+            PostcodeResult(postcode, cursorPosition, false, null)
         }
     }
 

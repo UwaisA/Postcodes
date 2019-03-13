@@ -14,17 +14,19 @@ class PostcodeUtilTest {
 
     @Test
     fun `Format formatted response`() {
-        assertEquals(PostcodeResult("12345-6", 0, true),
+        val postcode1 = "12345-6"
+        assertEquals(PostcodeResult(postcode1, 0, true, Components(postcode1, Locale.US)),
                 PostcodeUtil(Locale.US).format("123456"))
-        assertEquals(PostcodeResult("GIR 0A", 0, true),
+        val postcode2 = "GIR 0A"
+        assertEquals(PostcodeResult(postcode2, 0, true, Components(postcode2, Locale.UK)),
                 PostcodeUtil(Locale.UK).format("GiR 0a"))
     }
 
     @Test
     fun `Format unformatted response`() {
-        assertEquals(PostcodeResult("1234567890", 0, false),
+        assertEquals(PostcodeResult("1234567890", 0, false, null),
                 PostcodeUtil(Locale.US).format("1234567890"))
-        assertEquals(PostcodeResult("GiR 0aaa", 0, false),
+        assertEquals(PostcodeResult("GiR 0aaa", 0, false, null),
                 PostcodeUtil(Locale.UK).format("GiR 0aaa"))
     }
 
