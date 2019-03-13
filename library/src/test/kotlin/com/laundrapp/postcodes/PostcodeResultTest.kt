@@ -31,7 +31,7 @@ class PostcodeResultTest {
         )
         assertThat(
                 PostcodeResult("ABCD", 5, true, components1),
-                `is`(not(PostcodeResult("ABCD", 5, false, components2)))
+                `is`(not(PostcodeResult("ABCD", 5, true, components2)))
         )
     }
 
