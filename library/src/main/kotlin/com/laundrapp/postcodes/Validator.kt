@@ -22,21 +22,17 @@ internal class Validator private constructor(val locale: Locale, options: Option
         localisedPattern = Pattern.compile(alteredRegex)
     }
 
-    fun validate(postcode: String): Boolean {
-        return validateMemo[postcode] ?: localisedPattern.matcher(postcode).matches().also {
-            validateMemo[postcode] = it
-        }
-    }
+    fun validate(postcode: String): Boolean =
+            validateMemo[postcode] ?: localisedPattern.matcher(postcode).matches().also {
+                validateMemo[postcode] = it
+            }
 
-    fun partialValidate(postcode: String): Boolean {
-        return partialValidateMemo[postcode] ?: localisedPattern.matcher(postcode).partiallyMatches().also {
-            partialValidateMemo[postcode] = it
-        }
-    }
+    fun partialValidate(postcode: String): Boolean =
+            partialValidateMemo[postcode] ?: localisedPattern.matcher(postcode).partiallyMatches().also {
+                partialValidateMemo[postcode] = it
+            }
 
-    private fun Matcher.partiallyMatches(): Boolean {
-        return this.matches() || this.hitEnd()
-    }
+    private fun Matcher.partiallyMatches(): Boolean = this.matches() || this.hitEnd()
 
     companion object {
         private val validatorMemo = ConcurrentHashMap<Params, Validator>()
