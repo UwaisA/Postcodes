@@ -7,18 +7,22 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-internal class Validator private constructor(val locale: Locale, options: Options) {
+internal class Validator private constructor(locales: List<Locale>, options: Options) {
     private val localisedPattern: Pattern
     private val partialValidateMemo = ConcurrentHashMap<String, Boolean>()
     private val validateMemo = ConcurrentHashMap<String, Boolean>()
 
     init {
-        val localeRegex = getLocaleRegex(locale)
-        val alteredRegex = when (options.includeOptionalSeparators) {
-            INCLUDE -> localeRegex.replace("([\\- ])\\?".toRegex(), "$1")
-            EXCLUDE -> localeRegex.replace("([\\- ])\\?".toRegex(), "")
-            ACCEPT_EITHER -> localeRegex
-        }
+        val alteredRegex = locales
+                .map { getLocaleRegex(it) }
+                .map {
+                    when (options.includeOptionalSeparators) {
+                        INCLUDE -> it.replace("([\\- ])\\?".toRegex(), "$1")
+                        EXCLUDE -> it.replace("([\\- ])\\?".toRegex(), "")
+                        ACCEPT_EITHER -> it
+                    }
+                }
+                .reduce { regex1, regex2 -> "(?:$regex1)|(?:$regex2)" }
         localisedPattern = Pattern.compile(alteredRegex)
     }
 
@@ -37,13 +41,16 @@ internal class Validator private constructor(val locale: Locale, options: Option
     companion object {
         private val validatorMemo = ConcurrentHashMap<Params, Validator>()
 
-        fun create(locale: Locale, options: Options = Options(INCLUDE)): Validator {
-            val params = Params(locale, options)
-            return validatorMemo[params] ?: Validator(locale, options).also {
+        fun create(locale: Locale, options: Options = Options(INCLUDE)): Validator =
+                create(listOf(locale), options)
+
+        fun create(locales: List<Locale>, options: Options = Options(INCLUDE)): Validator {
+            val params = Params(locales, options)
+            return validatorMemo[params] ?: Validator(locales, options).also {
                 validatorMemo[params] = it
             }
         }
 
-        private data class Params(val locale: Locale, val options: Options)
+        private data class Params(val locales: List<Locale>, val options: Options)
     }
 }
