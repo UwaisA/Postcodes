@@ -6,9 +6,9 @@ import java.io.FileOutputStream
 import java.net.URL
 import java.util.*
 
-private const val baseURL = "http://i18napis.appspot.com/address"
+private const val baseURL = "https://chromium-i18n.appspot.com/ssl-address"
 
-fun main(args: Array<String>) {
+fun main() {
 
     val jsonString = URL("$baseURL/data").readText()
     val countries = jsonString.getAtJsonPath("countries")?.split('~')
