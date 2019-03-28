@@ -7,7 +7,7 @@ import java.util.*
  * Breaks a postcode down into it's major and minor components
  *
  * @param postcodeInput The formatted postcode to be broken into components
- * @param locale The Locale to be used to calculate the components of the postcode String
+ * @param locales The Locales to be used to calculate the components of the postcode String
  * @throws IllegalArgumentException If the value of postcodeInput is invalid for the locale
  */
 class Components internal constructor(private val postcodeInput: String, private val locales: List<Locale>) {
