@@ -1,5 +1,6 @@
 package com.laundrapp.postcodes
 
+import junit.framework.Assert.assertFalse
 import junit.framework.Assert.assertTrue
 import org.junit.Test
 import java.util.*
@@ -9,23 +10,23 @@ class ValidatorMultiCountryTest {
     private val differentValidators: Validator = Validator.create(listOf(
             Locale.US,
             Locale.UK
-    ), Options(Options.OptionalSeparator.ACCEPT_EITHER))
+    ))
 
     private val initiallyOverlappingValidators: Validator = Validator.create(listOf(
             Locale.US,
             Locale.forLanguageTag("nl-NL")
-    ), Options(Options.OptionalSeparator.ACCEPT_EITHER))
+    ))
 
     private val completeOverlappingValidators: Validator = Validator.create(listOf(
             Locale.forLanguageTag("fr-FR"),
             Locale.forLanguageTag("gr-GR"),
             Locale.forLanguageTag("pl-PL")
-    ), Options(Options.OptionalSeparator.ACCEPT_EITHER))
+    ))
 
     private val identicalValidators: Validator = Validator.create(listOf(
             Locale.forLanguageTag("es-ES"),
             Locale.GERMANY
-    ), Options(Options.OptionalSeparator.ACCEPT_EITHER))
+    ))
 
     @Test
     fun `Validation works with first validator`() {
@@ -67,6 +68,14 @@ class ValidatorMultiCountryTest {
     @Test
     fun `Partial validation works with third validator`() {
         assertTrue(completeOverlappingValidators.partialValidate("12-3"))
+    }
+
+    @Test
+    fun `Validation fails for unformatted input`() {
+        assertFalse(differentValidators.validate("LD5A5EB"))
+        assertFalse(initiallyOverlappingValidators.validate("0123AB"))
+        assertFalse(completeOverlappingValidators.validate("12345"))
+        assertFalse(identicalValidators.validate("12 345"))
     }
 
 }
