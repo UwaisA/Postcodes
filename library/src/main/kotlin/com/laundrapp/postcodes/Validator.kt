@@ -13,6 +13,10 @@ internal class Validator private constructor(locales: List<Locale>, options: Opt
     private val validateMemo = ConcurrentHashMap<String, Boolean>()
 
     init {
+        if (locales.isEmpty()) {
+            throw IllegalArgumentException()
+        }
+
         val alteredRegex = locales
                 .map { getLocaleRegex(it) }
                 .map {
@@ -22,7 +26,8 @@ internal class Validator private constructor(locales: List<Locale>, options: Opt
                         ACCEPT_EITHER -> it
                     }
                 }
-                .reduce { regex1, regex2 -> "(?:$regex1)|(?:$regex2)" }
+                .map {"(?:$it)"}
+                .reduce { regex1, regex2 -> "$regex1|$regex2" }
         localisedPattern = Pattern.compile(alteredRegex)
     }
 
