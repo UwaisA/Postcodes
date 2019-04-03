@@ -7,12 +7,15 @@ import java.util.*
  * Breaks a postcode down into it's major and minor components
  *
  * @param postcodeInput The formatted postcode to be broken into components
- * @param locale The Locale to be used to calculate the components of the postcode String
+ * @param locales The Locales to be used to calculate the components of the postcode String
  * @throws IllegalArgumentException If the value of postcodeInput is invalid for the locale
  */
-class Components internal constructor(private val postcodeInput: String, private val locale: Locale) {
-    private val acceptingValidator = Validator.create(locale, Options(ACCEPT_EITHER))
-    private val spaceIncludingValidator = Validator.create(locale, Options(INCLUDE))
+class Components internal constructor(private val postcodeInput: String, private val locales: List<Locale>) {
+
+    constructor(postcodeInput: String, locale: Locale): this(postcodeInput, listOf(locale))
+
+    private val acceptingValidator = Validator.create(locales, Options(ACCEPT_EITHER))
+    private val spaceIncludingValidator = Validator.create(locales, Options(INCLUDE))
     private val formatter = Formatter.create(spaceIncludingValidator)
 
     private val formattedPostcode: String =
@@ -59,7 +62,7 @@ class Components internal constructor(private val postcodeInput: String, private
     }
 
     private fun invalidPostcodeException(): IllegalArgumentException =
-            IllegalArgumentException("Input postcode $postcodeInput is invalid for locale $locale")
+            IllegalArgumentException("Input postcode $postcodeInput is invalid for locales $locales")
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

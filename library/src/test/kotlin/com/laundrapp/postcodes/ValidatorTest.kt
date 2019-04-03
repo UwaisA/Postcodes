@@ -14,6 +14,11 @@ class ValidatorTest {
         Validator.create(Locale.forLanguageTag("ZZ-ZZ"))
     }
 
+    @Test(expected = IllegalArgumentException::class)
+    fun `Validator constructor throws for empty locale list`() {
+        Validator.create(listOf())
+    }
+
     @Test
     fun `Validator can be constructed for valid country code`() {
         Validator.create(Locale.UK)

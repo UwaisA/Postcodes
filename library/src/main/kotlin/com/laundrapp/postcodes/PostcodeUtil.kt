@@ -4,13 +4,20 @@ import java.util.*
 
 class PostcodeUtil
 /**
- * @param locale This country of this locale is used to determine which postcode format to use
+ * @param locales The countries of these locales are used to determine which postcode format to use
  * @param options Allows customisation of the formatting of postcodes
- * @throws IllegalArgumentException This can be thrown if the provided country does not support postcodes. If
- * relying on the default locale then catching this exception is recommended
- */ @JvmOverloads constructor(val locale: Locale = Locale.getDefault(), options: Options = Options(Options.OptionalSeparator.INCLUDE)) {
+ * @throws IllegalArgumentException This can be thrown if one of the provided countries do not support postcodes.
+ */ @JvmOverloads constructor(private val locales: List<Locale>, options: Options = Options(Options.OptionalSeparator.INCLUDE)) {
 
-    private val validator = Validator.create(locale, options)
+    /**
+     * @param locale The country of this locale is used to determine which postcode format to use
+     * @param options Allows customisation of the formatting of postcodes
+     * @throws IllegalArgumentException This can be thrown if the provided country does not support postcodes. If
+     * relying on the default locale then catching this exception is recommended
+     */
+    constructor(locale: Locale = Locale.getDefault(),
+                options: Options = Options(Options.OptionalSeparator.INCLUDE)): this(listOf(locale), options)
+    private val validator = Validator.create(locales, options)
     private val formatter = Formatter.create(validator)
 
     /**
@@ -25,7 +32,7 @@ class PostcodeUtil
         return try {
             val formattedCursoredString = formatter.format(CursoredString(postcode, cursorPosition))
             PostcodeResult(formattedCursoredString.string, formattedCursoredString.cursorPosition,
-                    true, Components(formattedCursoredString.string, locale))
+                    true, Components(formattedCursoredString.string, locales))
         } catch (ex: Formatter.CouldNotFormatException) {
             PostcodeResult(postcode, cursorPosition, false, null)
         }
