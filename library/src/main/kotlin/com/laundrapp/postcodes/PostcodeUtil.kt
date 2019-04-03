@@ -4,7 +4,7 @@ import java.util.*
 
 class PostcodeUtil
 /**
- * @param locales The countries of these locale are used to determine which postcode format to use
+ * @param locales The countries of these locales are used to determine which postcode format to use
  * @param options Allows customisation of the formatting of postcodes
  * @throws IllegalArgumentException This can be thrown if one of the provided countries do not support postcodes.
  */ @JvmOverloads constructor(private val locales: List<Locale>, options: Options = Options(Options.OptionalSeparator.INCLUDE)) {
