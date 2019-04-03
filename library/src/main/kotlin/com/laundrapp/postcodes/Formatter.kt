@@ -8,6 +8,11 @@ internal class Formatter private constructor(private val validator: Validator) {
     private val leadingNonAlphanumeric = "(^[^a-zA-Z0-9]+)".toRegex()
     private val trailingNonAlphanumeric = "([^a-zA-Z0-9]+\$)".toRegex()
 
+    /**
+     * Convenience function for ignoring cursor tracking
+     */
+    fun format(postcode: String): String = format(CursoredString(postcode, 0)).string
+
     fun format(postcode: CursoredString): CursoredString {
         var outputCursorPosition = postcode.cursorPosition
         val postcodeUpperCase = postcode.string.toUpperCase()
