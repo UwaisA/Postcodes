@@ -42,7 +42,7 @@ class Components internal constructor(private val postcodeInput: String, private
 
     /**
      * The minor part of a postcode is the portion after the separator. It usually corresponds to a smaller area in
-     * the real world. E.g. "678" would be the major part of "12345 678"
+     * the real world. E.g. "678" would be the minor part of "12345 678"
      */
     val minor: String?
 
