@@ -24,12 +24,12 @@ postcode or where in the postcode string the cursor should be after formatting.
 
 ### Reporting issues
 To report a bug or request a feature please raise a GitHub issue
-[here](https://github.com/laundrapp/postcodes/issues)
+[here](https://github.com/UwaisA/postcodes/issues)
 
 ### Contributing
 Building Postcodes with Gradle is quite simple:
 ``` 
-git clone https://github.com/laundrapp/Postcodes.git
+git clone https://github.com/UwaisA/Postcodes.git
 cd Postcodes
 ./gradlew jar
 ```
